@@ -6,10 +6,11 @@ WriteMakefile(
 	'PREREQ_PM'    => {
 		# Test dependencies
 		File::Spec => '0.82',
-		Test::More => 0,
+		Test::More => '0.47',
+		Template   => '2.10',
 	},
 	($] >= 5.005) ? (
 		'AUTHOR'   => 'Adam Kennedy (cpan@ali.as)',
-		'ABSTRACT' => 'A heavily DWIM module to cycle through a set of values',
+		'ABSTRACT' => 'Cyclically insert into a Template from a sequence of values',
 	) : (),
 );

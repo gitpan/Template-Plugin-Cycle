@@ -20,7 +20,7 @@ BEGIN {
 
 
 # Does everything load?
-use Test::More 'tests' => 72;
+use Test::More 'tests' => 76;
 use Template::Plugin::Cycle ();
 use constant TPC => 'Template::Plugin::Cycle';
 
@@ -32,6 +32,22 @@ use constant TPC => 'Template::Plugin::Cycle';
 foreach ( qw{new init reset next value list elements} ) {
 	ok( TPC->can( $_ ), "Template::Plugin::Cycle method '$_' exists" );
 }
+
+
+
+
+# Check that we can pass a context as the first argument
+{
+my $Cycle1 = Template::Plugin::Cycle->new( 'foo', 'bar' );
+isa_ok( $Cycle1, 'Template::Plugin::Cycle' );
+my $Context = bless {}, 'Template::Context';
+isa_ok( $Context, 'Template::Context' );
+my $Cycle2 = Template::Plugin::Cycle->new( $Context, 'foo', 'bar' );
+isa_ok( $Cycle2, 'Template::Plugin::Cycle' );
+is( $Cycle1->elements, $Cycle2->elements, 'Context argument is correctly ignored' );
+}
+
+
 
 
 

@@ -4,10 +4,32 @@ package Template::Plugin::Cycle;
 
 =head1 NAME
 
-Template::Plugin::Cycle - Cyclically insert from a sequence of values
+Template::Plugin::Cycle - Cyclically insert into a Template from a sequence of values
 
 =head1 SYNOPSIS
 
+  [% USE cycle('row', 'altrow') %]
+  
+  <table border="1">
+    <tr class="[% class %]">
+      <td>First row</td>
+    </tr>
+    <tr class="[% class %]">
+      <td>Second row</td>
+    </tr>
+    <tr class="[% class %]">
+      <td>Third row</td>
+    </tr>
+  </table>
+  
+  
+  
+  
+  
+  ###################################################################
+  # Alternatively, you might want to make it available to all templates
+  # throughout an entire application.
+  
   use Template::Plugin::Cycle;
   
   # Create a Cycle object and set some values
@@ -42,10 +64,10 @@ Template::Plugin::Cycle - Cyclically insert from a sequence of values
       <td>Another first row</td>
     </tr>
   </table>
-
-
-
-
+  
+  
+  
+  
   
   #######################################################
   # Which of course produces
@@ -70,15 +92,16 @@ Template::Plugin::Cycle - Cyclically insert from a sequence of values
 
 =head1 DESCRIPTION
 
-Sometime, admittedly mostly when doing alternating table row backgrounds, :)
-when you need to dump an alternating, cycling, set of values into a template.
+Sometimes, apparently almost exclusively when doing alternating table row
+backgrounds, you need to print an alternating, cycling, set of values
+into a template.
 
-Template::Plugin::Cycle is a small, simple, DWIM solution to these sorts of
-tasks. And it's pretty darn easy to use.
+Template::Plugin::Cycle is a small, simple, and hopefully DWIM solution to
+these sorts of tasks.
 
-Simple create a new Cycle object as normal, passing it the values to cycle
-between, and then just use it in the appropriate places. Each time it is
-evaluated, a different value will be inserted into the template.
+It can be used either as a normal Template::Plugin, or can be created
+directly and passed in as a template argument, so that you can set up
+situations where it is implicitly available in every page.
 
 =head1 METHODS
 
@@ -86,12 +109,13 @@ evaluated, a different value will be inserted into the template.
 
 use strict;
 use UNIVERSAL 'isa';
+use base 'Template::Plugin';
 use overload 'bool' => sub () { 1 };
 use overload '""'   => 'next';
 
 use vars qw{$VERSION};
 BEGIN {
-	$VERSION = '0.01';
+	$VERSION = '0.03';
 }
 
 
@@ -113,7 +137,12 @@ through.
 
 sub new {
 	my $self = bless [ 0, () ], shift;
+
+	# Ignore any Template::Context param
+	shift if isa($_[0], 'Template::Context');
+
 	$self->init( @_ ) if @_;
+
 	$self;
 }
 
@@ -187,7 +216,7 @@ The C<next> method returns the next value from the Cycle. If the end of
 the list of valuese is reached, it will "cycle" back the first object again.
 
 This method is also the one called when the object is stringified. That is,
-when it appears on it's own in a template. Thus, you can do something like
+when it appears on its own in a template. Thus, you can do something like
 the following.
 
   <!-- An example of alternate row classes in a table-->
@@ -219,9 +248,7 @@ The C<value> method is an analogy for the C<next> method.
 
 =cut
 
-BEGIN {
-	*value = *next{CODE};
-}
+sub value { shift->next(@_) }
 
 =pod
 
@@ -252,13 +279,15 @@ Bugs should be submitted via the CPAN bug tracker, located at
 
 L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Template%3A%3APlugin%3A%3ACycle>
 
-For other issues, contact the author.
+For other issues, or commercial enhancement or support, contact the author..
 
 =head1 AUTHOR
 
-    Adam Kennedy (Maintainer)
-    cpan@ali.as
-    http://ali.as/
+Adam Kennedy (Maintainer), L<http://ali.as/>, cpan@ali.as
+
+Thank you to Phase N Australia (L<http://phase-n.com/>) for permitting
+the open sourcing and release of this distribution as a spin-off from a
+commercial project.
 
 =head1 COPYRIGHT
 

@@ -1,4 +1,12 @@
 Revision history for Perl extension Template::Plugin::StringTree;
 
-0.01
+0.03 Tue Dec 21 2004
+	- Fixed to act like a real Template::Plugin
+	- Resolves CPAN #8901
+
+0.02 Tue Jul 29 2004
+	- No code changes
+	- Fixed some documentation bugs
+
+0.01 Tue Jul 29 2004
 	- Created the initial version of the file
