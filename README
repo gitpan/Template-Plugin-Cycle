@@ -86,10 +86,16 @@ DESCRIPTION
     situations where it is implicitly available in every page.
 
 METHODS
-  new [ @list ]
+  new [ $Context ] [, @list ]
     The "new" constructor creates and returns a new
     "Template::Plugin::Cycle" object. It can be optionally passed an initial
     set of values to cycle through.
+
+    When called from within a Template, the new constructor will be passed
+    the current Template::Context as the first argument. This will be
+    ignored.
+
+    By doing this, you can use it both directly, AND from inside a Template.
 
   init @list
     If you need to set the values for a new empty object, of change the

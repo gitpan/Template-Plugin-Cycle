@@ -110,12 +110,12 @@ situations where it is implicitly available in every page.
 use strict;
 use UNIVERSAL 'isa';
 use base 'Template::Plugin';
-use overload 'bool' => sub () { 1 };
-use overload '""'   => 'next';
+use overload 'bool' => sub () { 1 },
+             '""'   => 'next';
 
 use vars qw{$VERSION};
 BEGIN {
-	$VERSION = '0.03';
+	$VERSION = '0.04';
 }
 
 
@@ -127,11 +127,16 @@ BEGIN {
 
 =pod
 
-=head2 new [ @list ]
+=head2 new [ $Context ] [, @list ]
 
 The C<new> constructor creates and returns a new C<Template::Plugin::Cycle>
 object. It can be optionally passed an initial set of values to cycle
 through.
+
+When called from within a Template, the new constructor will be passed the
+current L<Template::Context> as the first argument. This will be ignored.
+
+By doing this, you can use it both directly, AND from inside a Template.
 
 =cut
 
