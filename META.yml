@@ -18,6 +18,7 @@ no_index:
     - t
 requires:
   File::Spec: 0.82
+  Params::Util: 0.20
   Template: 2.10
   perl: 5.005
-version: 1.05
+version: 1.06
